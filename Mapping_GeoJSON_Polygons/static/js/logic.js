@@ -40,6 +40,8 @@ L.control.layers(baseMaps).addTo(map);
 // Then we add our 'graymap' tile layer to the map.
 // streets.addTo(map);
 
+// Accessing the Toronto neighborhoods GeoJSON URL.
+let torontoHoods = "https://raw.githubusercontent.com/bessobrien/Mapping_Earthquakes/Mapping_GeoJSON_Polygons/Mapping_GeoJSON_Polygons/torontoNeighborhoods.json";
 // accessing the toronto airport data
 let torontoData = "https://raw.githubusercontent.com/bessobrien/Mapping_Earthquakes/Mapping_GeoJSON_Linestrings/Mapping_GeoJSON_Linestrings/torontoRoutes.json";
 // Accessing the airport GeoJSON URL
@@ -50,6 +52,26 @@ let myStyle = {
   color: "#ffffa1",
   weight: 2
 }
+
+//create a style for the neighborhoods.
+let polyStyle = {
+  color: "#0018a8",
+  weight: 1,
+  fillColor: "ffffa1"
+}
+
+// Grabbing our Toronto neighborhood data GeoJSON data.
+d3.json(torontoHoods).then(function(data) {
+  console.log(data);
+  // Creating a GeoJSON layer with the retrieved data.
+  L.geoJSON(data, {
+    style: polyStyle,
+    onEachFeature: function(feature, layer) {
+      layer.bindPopup("Neighborhood: " + feature.properties.AREA_NAME)
+    }
+  })
+  .addTo(map);
+});
 
 // Grabbing our GeoJSON data.
 d3.json(torontoData).then(function(data) {
